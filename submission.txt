@@ -2,13 +2,37 @@
 
 **1. Penjelasan Singkat Proyek**
 
-Proyek ini adalah sebuah pipeline ETL (Extract, Transform, Load) sederhana yang dibangun dengan Python. Tujuannya adalah untuk mengumpulkan data produk fashion dari situs web, membersihkan dan mentransformasikannya, lalu menyimpannya dalam format yang siap untuk dianalisis.
+Proyek ini adalah sebuah pipeline ETL (Extract, Transform, Load) sederhana yang dibangun dengan Python. Tujuannya adalah untuk mengumpulkan data produk fashion dari situs web https://fashion-studio.dicoding.dev/, membersihkan dan mentransformasikannya, lalu menyimpannya dalam format yang siap untuk dianalisis.
 
 - **Extract**: Skrip akan melakukan scraping data dari situs web fashion, menangani paginasi untuk mengambil semua produk. Data mentah yang diekstrak (nama produk, harga, rating, dll.) disimpan dalam file `fashion_data.csv`.
 - **Transform**: Data mentah kemudian dibersihkan. Proses ini mencakup ekstraksi nilai numerik dari teks (misalnya, mengambil `100.00` dari `$100.00`), konversi harga dari USD ke IDR, penyesuaian tipe data (float, integer, category), dan penghapusan data yang tidak valid atau duplikat.
 - **Load**: Data yang sudah bersih dan terstruktur disimpan ke dalam file baru bernama `clean_fashion_data.csv`.
 
-**2. Cara Menjalankan Skrip ETL Pipeline**
+**2. Pengaturan dan Aktivasi Virtual Environment**
+
+Sebelum menjalankan skrip, disarankan untuk membuat dan mengaktifkan virtual environment agar dependensi proyek tidak tercampur dengan instalasi Python global.
+
+a. **Buat Virtual Environment:**
+Buka terminal di direktori utama proyek dan jalankan perintah berikut. Ini akan membuat folder baru bernama `etl_env`.
+```sh
+python -m venv etl_env
+```
+
+b. **Aktifkan Virtual Environment:**
+Untuk mengaktifkan environment yang baru dibuat (di Windows), jalankan:
+```sh
+.\etl_env\Scripts\activate
+```
+Setelah aktif, nama environment (`etl_env`) akan muncul di awal baris terminal Anda.
+
+c. **Instal Dependensi:**
+Pasang semua library yang dibutuhkan proyek dengan menjalankan perintah berikut:
+```sh
+pip install -r requirements.txt
+```
+Sekarang, Anda siap untuk menjalankan pipeline ETL.
+
+**3. Cara Menjalankan Skrip ETL Pipeline**
 
 Pastikan Anda berada di direktori utama proyek (`d:\Tugas_Dicoding\Fundamental_Pemrosesan_Data`). Jalankan file `main.py` melalui terminal.
 
@@ -18,7 +42,7 @@ python main.py
 
 Skrip akan secara otomatis mencoba mengakses URL default. Jika gagal, Anda akan diminta untuk memasukkan URL yang valid secara manual di terminal.
 
-**3. Cara Menjalankan Unit Test**
+**4. Cara Menjalankan Unit Test**
 
 Semua skrip pengujian berada di dalam folder `tests/`. Untuk menjalankan semua unit test secara otomatis, gunakan perintah berikut dari direktori utama:
 
@@ -28,7 +52,7 @@ python -m unittest discover tests
 
 Perintah ini akan mencari dan menjalankan semua file test (yang berawalan `test_`) di dalam folder `tests`.
 
-**4. Cara Menjalankan Test Coverage**
+**5. Cara Menjalankan Test Coverage**
 
 Untuk memeriksa seberapa banyak kode sumber yang dicakup oleh unit test, Anda dapat menggunakan library `coverage`.
 
