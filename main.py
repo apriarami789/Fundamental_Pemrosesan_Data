@@ -35,14 +35,17 @@ def main():
     # fungsi konversi mata uang
     df['price'] = df['price'].apply(transform.dollar_to_rupiah)
 
-    # Fungsi mengambil kolom yang penting
-    df = transform.fix_column_data(df)
-
     # Fungsi mengubah data type semua kolom
     df = transform.change_data_type(df)
 
+    # Fungsi mengambil kolom yang penting
+    df = transform.fix_column_data(df)
+    
     # Fungsi untuk membersihkan data
     df = transform.clean_data(df)
+
+    # Memberikan informasi setiap kolom
+    df.info()
 
     # Fungsi menyimpan data ke CSV
     load.save_clean_data(df)

@@ -22,7 +22,7 @@ def read_data(data):
 def extract_product_name(val):
     if pd.isna(val) or "Unknown Product" in val:
         return None
-    return val
+    return str(val)
 
 # Transformasi kolom price
 def extract_price(val):
@@ -46,21 +46,38 @@ def extract_color(val):
 
 # ---------Changes Data Type--------------
 def change_data_type(data):
-    df = data.copy()
-    df['product_name'] = df['product_name'].astype(str)
-    df['price'] = df['price'].astype('Float64')
-    df['rating'] = df['rating'].astype('Float64')
-    df['color'] = df['color'].astype('Int64')
-    df['size'] = df['size'].str.replace('Size: ', '').astype('category')
-    df['gender'] = df['gender'].str.replace('Gender: ', '').astype('category')
-    # Pastikan kolom scraped_at ada
-    if 'scraped_at' in df.columns:
-        df['timestamp'] = pd.to_datetime(df['scraped_at'])
-    elif 'timestamp' not in df.columns:
-        # fallback jika tidak ada scraped_at, buat timestamp dummy
-        df['timestamp'] = pd.Timestamp.now()
+    """
+    Mengubah tipe data kolom DataFrame menggunakan mapping.
+    Juga menangani transformasi khusus untuk kolom tertentu.
+    """
+    # 1. Lakukan transformasi khusus yang tidak bisa dilakukan dengan astype biasa
+    data['size'] = data['size'].str.replace('Size: ', '')
+    data['gender'] = data['gender'].str.replace('Gender: ', '')
+
+    # 2. Buat mapping untuk tipe data yang diinginkan
+    #    Menggunakan 'Int64' (dengan huruf besar 'I') untuk integer
+    #    memungkinkan adanya nilai NaN (missing values).
+    dtype_mapping = {
+        'product_name': 'string',
+        'price': 'float64',
+        'rating': 'float64',
+        'color': 'Int64',
+        'size': 'category',
+        'gender': 'category'
+    }
+
+    # 3. Terapkan mapping ke DataFrame menggunakan astype()
+    data = data.astype(dtype_mapping)
+
+    # 4. Tangani kolom timestamp secara terpisah karena logikanya kondisional
+    if 'scraped_at' in data.columns:
+        data['timestamp'] = pd.to_datetime(data['scraped_at'])
+    else:
+        # Fallback jika tidak ada kolom 'scraped_at'
+        data['timestamp'] = pd.Timestamp.now()
+
     print("Tipe data setiap kolom sudah diubah dan juga sudah di transformasi.")
-    return df
+    return data
 
 # Pilih dan urutkan kolom akhir
 def fix_column_data(data):
@@ -74,10 +91,10 @@ def fix_column_data(data):
 
 #--------------Clean Data-----------------
 def clean_data(data):
-    df_clean = data.dropna().reset_index(drop=True)
-    df_clean = df_clean.drop_duplicates().reset_index(drop=True)
+    data = data.dropna().reset_index(drop=True)
+    data = data.drop_duplicates().reset_index(drop=True)
     print("Data sudah dibersihkan dari nilai NaN dan duplikat.")
-    return df_clean
+    return data
 
 #----------------Convertion Data------------------
 def dollar_to_rupiah(value):
